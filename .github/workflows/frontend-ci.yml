@@ -1,0 +1,44 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "FE/**"
+      - ".github/workflows/frontend-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "FE/**"
+      - ".github/workflows/frontend-ci.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: FE
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: FE/package-lock.json
+
+      - name: Cài thư viện
+        run: npm ci
+
+      - name: Build
+        env:
+          VITE_API_URL: http://localhost:8000
+        run: npm run build
+
+      - name: Lưu bản build
+        uses: actions/upload-artifact@v4
+        with:
+          name: fe-dist
+          path: FE/dist
+          retention-days: 7

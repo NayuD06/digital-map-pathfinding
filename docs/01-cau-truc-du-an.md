@@ -15,6 +15,10 @@ FE gọi BE qua HTTP. BE bật CORS cho phép `http://localhost:5173`.
 digital-map-pathfinding/
 ├── .gitignore
 ├── README.md
+├── .github/
+│   └── workflows/
+│       ├── backend-ci.yml        # CI cho BE: ruff, kiểm tra cú pháp, pytest
+│       └── frontend-ci.yml       # CI cho FE: npm ci, build, lưu bản build
 ├── docs/
 │   ├── 01-cau-truc-du-an.md      # Tài liệu này
 │   └── 02-de-xuat-du-an.md       # Đề xuất nội dung, công nghệ, kế hoạch
@@ -43,6 +47,7 @@ digital-map-pathfinding/
     ├── README.md                 # Hướng dẫn chạy FE
     ├── index.html
     ├── package.json
+    ├── package-lock.json         # Khóa phiên bản thư viện (CI dùng npm ci)
     ├── vite.config.js            # Cấu hình Vite, port 5173
     ├── public/                   # File tĩnh
     └── src/
@@ -116,5 +121,18 @@ npm install
 copy .env.example .env
 npm run dev
 ```
+
+## CI/CD (GitHub Actions)
+
+Mỗi lần push lên `main` hoặc tạo Pull Request vào `main`, GitHub tự chạy kiểm tra. Workflow chỉ chạy khi thư mục tương ứng có thay đổi.
+
+| Workflow | Chạy khi sửa | Các bước |
+|---|---|---|
+| `Backend CI` | `BE/**` | Cài Python 3.12 → cài thư viện → `ruff check` → kiểm tra cú pháp → `pytest` |
+| `Frontend CI` | `FE/**` | Cài Node 20 → `npm ci` → `npm run build` → lưu thư mục `dist` (giữ 7 ngày) |
+
+Xem kết quả ở tab **Actions** trên GitHub. Khi thêm thư viện cho FE, nhớ commit cả `package-lock.json`.
+
+Phần CD (tự động deploy) sẽ thêm khi chọn nơi deploy, ví dụ BE lên Render và FE lên Vercel.
 
 > Trạng thái hiện tại: mới có **khung thư mục**. Các file code chỉ chứa chú thích mô tả, chưa có logic.
