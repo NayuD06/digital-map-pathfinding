@@ -124,12 +124,12 @@ npm run dev
 
 ## CI/CD (GitHub Actions)
 
-Mỗi lần push lên `main` hoặc tạo Pull Request vào `main`, GitHub tự chạy kiểm tra. Workflow chỉ chạy khi thư mục tương ứng có thay đổi.
+Mỗi lần push lên `main` hoặc tạo Pull Request vào `main`, GitHub tự chạy cả 2 workflow.
 
-| Workflow | Chạy khi sửa | Các bước |
-|---|---|---|
-| `Backend CI` | `BE/**` | Cài Python 3.12 → cài thư viện → `ruff check` → kiểm tra cú pháp → `pytest` |
-| `Frontend CI` | `FE/**` | Cài Node 20 → `npm ci` → `npm run build` → lưu thư mục `dist` (giữ 7 ngày) |
+| Workflow | Các bước |
+|---|---|
+| `Backend CI` | Cài Python 3.12 → cài thư viện → `ruff check` → kiểm tra cú pháp → `pytest` |
+| `Frontend CI` | Cài Node 20 → `npm ci` → `npm run build` → lưu thư mục `dist` (giữ 7 ngày) |
 
 Xem kết quả ở tab **Actions** trên GitHub. Khi thêm thư viện cho FE, nhớ commit cả `package-lock.json`.
 
