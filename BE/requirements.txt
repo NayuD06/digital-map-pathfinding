@@ -3,4 +3,6 @@ uvicorn[standard]>=0.30
 osmnx>=2.0
 networkx>=3.3
 pydantic-settings>=2.4
+sqlalchemy>=2.0
+pymysql[rsa]>=1.1
 pytest>=8.3
