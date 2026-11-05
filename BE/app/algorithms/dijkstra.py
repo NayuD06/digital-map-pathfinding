@@ -3,7 +3,7 @@ import heapq
 import itertools
 import time
 
-from app.algorithms.utils import build_result, neighbors
+from app.algorithms.utils import build_result, prepare
 
 
 def dijkstra(G, start, goal) -> dict:
@@ -12,6 +12,7 @@ def dijkstra(G, start, goal) -> dict:
     Dừng ngay khi lấy được goal ra khỏi hàng đợi. Node "đã duyệt" là node
     đã được lấy ra khỏi hàng đợi (khoảng cách tới nó đã chốt).
     """
+    adj = prepare(G).adj
     started_at = time.perf_counter()
     dist = {start: 0.0}
     parent = {}
@@ -30,7 +31,7 @@ def dijkstra(G, start, goal) -> dict:
         if u == goal:
             break
 
-        for v, w in neighbors(G, u):
+        for v, w in adj[u]:
             nd = d + w
             if nd < dist.get(v, float("inf")):
                 dist[v] = nd

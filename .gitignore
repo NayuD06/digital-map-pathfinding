@@ -13,6 +13,7 @@ venv/
 BE/data/*.graphml
 BE/data/osmnx_cache/
 BE/data/*.db
+BE/data/*.osm.pbf
 
 # Node
 node_modules/

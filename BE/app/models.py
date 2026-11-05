@@ -15,7 +15,7 @@ from app.db import Base
 
 
 class Map(Base):
-    """Một bản đồ đã tải từ OSM, nhận ra bằng tên quận hoặc bbox."""
+    """Một bản đồ đã tải từ OSM, nhận ra bằng tên khu vực hoặc bbox."""
 
     __tablename__ = "maps"
 

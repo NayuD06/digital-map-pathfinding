@@ -53,7 +53,7 @@ function VisitedByDistance({ rows }) {
 }
 
 export default function BenchmarkPanel({ databaseEnabled }) {
-  const [pairCount, setPairCount] = useState(50)
+  const [pairCount, setPairCount] = useState(20)
   const [seed, setSeed] = useState('')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -82,7 +82,10 @@ export default function BenchmarkPanel({ databaseEnabled }) {
   return (
     <>
       <section className="card">
-        <p className="hint">Chạy cả 2 thuật toán trên N cặp điểm ngẫu nhiên trong quận.</p>
+        <p className="hint">
+          Chạy cả 2 thuật toán trên N cặp điểm ngẫu nhiên trên bản đồ. Với bản đồ toàn TP.HCM, mỗi cặp mất khoảng 2
+          giây.
+        </p>
         <div className="form-row">
           <label>
             Số cặp điểm

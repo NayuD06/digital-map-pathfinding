@@ -23,9 +23,20 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api")
 
+# Tuyến dài trên bản đồ cả thành phố duyệt hàng trăm nghìn node; chỉ gửi một phần cho FE vẽ
+MAX_VISITED_SHOWN = 5000
+
+
+def _sample(nodes: list, limit: int) -> list:
+    """Lấy đều tối đa `limit` phần tử, giữ thứ tự duyệt."""
+    if len(nodes) <= limit:
+        return nodes
+    step = len(nodes) / limit
+    return [nodes[int(i * step)] for i in range(limit)]
+
 
 def _snap(request: Request, lat: float, lng: float):
-    """Kiểm tra tọa độ nằm trong khung bao của quận rồi trả về node gần nhất."""
+    """Kiểm tra tọa độ nằm trong khung bao của bản đồ rồi trả về node gần nhất."""
     south, west, north, east = request.app.state.graph_info["bbox"]
     if not (south <= lat <= north and west <= lng <= east):
         raise HTTPException(400, f"Tọa độ ({lat}, {lng}) nằm ngoài vùng bản đồ")
@@ -76,7 +87,7 @@ def _run(request: Request, algo: str, points: tuple) -> RouteResult:
     return RouteResult(
         algorithm=algo,
         path=coords(result["path"]),
-        visited=coords(result["visited_nodes"]),
+        visited=coords(_sample(result["visited_nodes"], MAX_VISITED_SHOWN)),
         distance_m=result["distance_m"],
         runtime_ms=result["runtime_ms"],
         visited_count=result["visited_count"],

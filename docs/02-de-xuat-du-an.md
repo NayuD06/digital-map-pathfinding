@@ -30,7 +30,7 @@
 
 ### Phần B: Ứng dụng demo
 
-- Tải bản đồ một quận (mặc định **Quận 1, TP.HCM**) từ OpenStreetMap
+- Tải bản đồ từ OpenStreetMap: ban đầu là một quận (**Quận 1, TP.HCM**), bản demo đã mở rộng ra **toàn TP.HCM theo ranh giới mới**
 - Click chọn điểm đi và điểm đến trên bản đồ
 - Chọn thuật toán: Dijkstra hoặc A\*
 - Hiển thị:

@@ -137,15 +137,13 @@ def test_matches_networkx_on_grid(seed):
 def test_real_map_matches_networkx():
     import osmnx as ox
 
-    G = ox.load_graphml(settings.graph_cache_file)
+    # Giống lúc BE nạp bản đồ: chỉ giữ thành phần liên thông mạnh lớn nhất nên cặp nào cũng có đường đi.
+    # Bản đồ toàn TP.HCM khá lớn (đọc file mất gần 1 phút) nên chỉ thử vài cặp.
+    G = ox.truncate.largest_component(ox.load_graphml(settings.graph_cache_file), strongly=True)
     rng = random.Random(42)
     nodes = list(G.nodes)
-    checked = 0
-    while checked < 20:
+    for _ in range(5):
         start, goal = rng.choice(nodes), rng.choice(nodes)
-        if not nx.has_path(G, start, goal):
-            continue
         expected = nx.shortest_path_length(G, start, goal, weight="length")
         assert dijkstra(G, start, goal)["distance_m"] == pytest.approx(expected)
         assert astar(G, start, goal)["distance_m"] == pytest.approx(expected)
-        checked += 1

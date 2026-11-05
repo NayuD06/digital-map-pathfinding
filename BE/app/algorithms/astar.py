@@ -3,7 +3,7 @@ import heapq
 import itertools
 import time
 
-from app.algorithms.utils import build_result, neighbors, node_distance
+from app.algorithms.utils import build_result, distance_to, prepare
 
 
 def astar(G, start, goal) -> dict:
@@ -14,13 +14,16 @@ def astar(G, start, goal) -> dict:
     quá (chấp nhận được) và thỏa bất đẳng thức tam giác (nhất quán), vì vậy A*
     vẫn cho đường ngắn nhất và mỗi node chỉ cần duyệt một lần.
     """
+    prepared = prepare(G)
+    adj = prepared.adj
     started_at = time.perf_counter()
+    h = distance_to(prepared, goal)
     dist = {start: 0.0}
     parent = {}
     visited = set()
     visited_order = []
     tie = itertools.count()
-    heap = [(node_distance(G, start, goal), next(tie), start)]
+    heap = [(h(start), next(tie), start)]
 
     while heap:
         _, _, u = heapq.heappop(heap)
@@ -31,11 +34,11 @@ def astar(G, start, goal) -> dict:
         if u == goal:
             break
 
-        for v, w in neighbors(G, u):
+        for v, w in adj[u]:
             g = dist[u] + w
             if g < dist.get(v, float("inf")):
                 dist[v] = g
                 parent[v] = u
-                heapq.heappush(heap, (g + node_distance(G, v, goal), next(tie), v))
+                heapq.heappush(heap, (g + h(v), next(tie), v))
 
     return build_result(parent, dist, visited_order, start, goal, started_at)

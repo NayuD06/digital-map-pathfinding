@@ -33,15 +33,17 @@ Mức ưu tiên:
 ## 2. Chức năng Backend (`BE/`)
 
 ### 2.1 Cấu hình và khởi tạo — P1
-- [x] `config.py`: đọc `PORT`, `PLACE_NAME`, `CORS_ORIGINS`, `GRAPH_CACHE_PATH` từ `.env`
+- [x] `config.py`: đọc `PORT`, `PLACE_NAME`, `CORS_ORIGINS`, `GRAPH_BUFFER_KM`, `GRAPH_CACHE_PATH`, `GRAPH_BBOX`, `OVERPASS_URL`, `MYSQL_*` từ `.env`
 - [x] `main.py`: tạo app FastAPI, bật CORS, gắn router `/api`
 - [x] Endpoint `GET /health` trả về `{"status": "ok"}`
 
 ### 2.2 Tải và quản lý bản đồ — P1
-- [x] `graph_loader.py`: tải mạng đường của quận bằng `osmnx.graph_from_place(..., network_type="drive")`
+- [x] `graph_loader.py`: tải mạng đường (mặc định toàn TP.HCM theo ranh giới mới, nới thêm 10 km) bằng `osmnx.graph_from_polygon(..., network_type="drive")`
 - [x] Lưu cache ra file `.graphml`; lần chạy sau đọc từ file
 - [x] Nạp đồ thị một lần khi khởi động server
-- [x] `GET /api/graph/info`: trả về tên quận, số node, số cạnh, khung bao (bbox), tâm bản đồ
+- [x] `GET /api/graph/info`: trả về tên khu vực, số node, số cạnh, khung bao (bbox), tâm bản đồ
+- [x] Bản đồ toàn TP.HCM: tính sẵn danh sách kề, tìm node gần nhất bằng NumPy, chỉ trả về FE tối đa 5.000 node đã duyệt (lấy mẫu đều), tự thử lại khi Overpass lỗi
+- [x] Script `scripts/graph_from_pbf.py` dựng bản đồ từ file OSM của Geofabrik khi Overpass quá tải
 
 **Kết quả cần đạt:** khởi động lần 2 không tải lại từ mạng, API trả đúng số node/cạnh.
 
@@ -108,12 +110,12 @@ Mức ưu tiên:
 - [x] `App.jsx`: bố cục 2 cột (bản đồ, bảng điều khiển); trên điện thoại xếp dọc
 
 ### 3.2 Bản đồ — P1 (`MapView.jsx`)
-- [x] Hiển thị bản đồ OSM, căn giữa theo tâm quận lấy từ `/api/graph/info`
+- [x] Hiển thị bản đồ OSM, căn giữa theo tâm bản đồ lấy từ `/api/graph/info`
 - [x] Click lần 1 đặt điểm đi (marker xanh lá), lần 2 đặt điểm đến (marker đỏ)
 - [x] Kéo thả marker để đổi điểm
 - [x] Vẽ đường đi bằng `Polyline`
 - [x] Vẽ các node đã duyệt bằng `CircleMarker` nhỏ, mờ
-- [x] Vẽ khung bao của quận để người dùng biết vùng hỗ trợ
+- [x] Vẽ khung bao của bản đồ để người dùng biết vùng hỗ trợ
 
 ### 3.3 Bảng điều khiển — P1 (`ControlPanel.jsx`)
 - [x] Chọn thuật toán: Dijkstra / A\*
@@ -144,7 +146,7 @@ Mức ưu tiên:
 
 ## 4. Đánh giá thực nghiệm — P1
 
-- [x] Chọn 50–100 cặp điểm ngẫu nhiên trong quận (tab Benchmark, ghi lại seed để chạy lại được)
+- [x] Chọn 50–100 cặp điểm ngẫu nhiên trên bản đồ (tab Benchmark, ghi lại seed để chạy lại được)
 - [x] Ghi lại: độ dài, thời gian chạy, số node duyệt cho từng thuật toán (bảng `benchmark_results`, file CSV)
 - [ ] Vẽ biểu đồ so sánh, đưa vào báo cáo
 - [ ] Đối chiếu một số tuyến với Google Maps hoặc OSRM
@@ -164,7 +166,7 @@ Mức ưu tiên:
 
 ## 6. Kịch bản demo đề xuất
 
-1. Mở ứng dụng, giới thiệu bản đồ Quận 1 và số node/cạnh của đồ thị.
+1. Mở ứng dụng, giới thiệu bản đồ TP.HCM và số node/cạnh của đồ thị.
 2. Chọn 2 điểm xa nhau, chạy **Dijkstra**: xem đường đi và vùng node đã duyệt rộng.
 3. Chạy **A\*** trên cùng 2 điểm: cùng đường đi, vùng duyệt hẹp hơn hẳn.
 4. Bấm **So sánh**: xem biểu đồ thời gian chạy và số node duyệt.

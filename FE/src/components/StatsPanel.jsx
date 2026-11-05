@@ -9,6 +9,8 @@ const ROWS = [
 
 export default function StatsPanel({ results }) {
   if (results.length === 0) return null
+  // Backend chỉ trả về tối đa vài nghìn node đã duyệt (lấy mẫu đều) để bản đồ không bị đơ
+  const sampled = results.find((r) => r.visited.length < r.visited_count)
 
   return (
     <section className="card">
@@ -35,6 +37,12 @@ export default function StatsPanel({ results }) {
           ))}
         </tbody>
       </table>
+      {sampled && (
+        <p className="muted">
+          Bản đồ chỉ vẽ {sampled.visited.length.toLocaleString('vi-VN')} node đã duyệt cho mỗi thuật toán, lấy mẫu
+          đều theo thứ tự duyệt.
+        </p>
+      )}
     </section>
   )
 }

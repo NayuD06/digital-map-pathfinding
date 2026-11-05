@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.algorithms.utils import prepare
 from app.api.routes import router
 from app.config import settings
 from app.db import create_session_factory
@@ -18,6 +19,8 @@ async def lifespan(app: FastAPI):
     # Kết nối database (nếu có) và nạp đồ thị một lần khi khởi động, các request dùng chung
     app.state.db = create_session_factory(settings.db_url)
     app.state.graph, app.state.map_id = load_graph(app.state.db)
+    # Tính sẵn danh sách kề, tọa độ để request đầu tiên không phải chờ
+    prepare(app.state.graph)
     app.state.graph_info = {**graph_info(app.state.graph), "database_enabled": app.state.db is not None}
     yield
 
