@@ -88,6 +88,8 @@ File `.env` thật không được đưa lên git, chỉ có `.env.example`.
 | GET | `/api/route?algo=dijkstra\|astar&from_lat=&from_lng=&to_lat=&to_lng=` | Đường đi, độ dài, thời gian chạy, số node đã duyệt |
 | GET | `/api/compare?from_lat=&from_lng=&to_lat=&to_lng=` | Chạy cả 2 thuật toán để so sánh |
 
+Chi tiết định dạng request/response: [05-dinh-dang-api.md](05-dinh-dang-api.md).
+
 ## Luồng hoạt động
 
 ```
