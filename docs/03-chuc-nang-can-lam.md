@@ -33,9 +33,9 @@ Mức ưu tiên:
 ## 2. Chức năng Backend (`BE/`)
 
 ### 2.1 Cấu hình và khởi tạo — P1
-- [ ] `config.py`: đọc `PORT`, `PLACE_NAME`, `CORS_ORIGINS`, `GRAPH_CACHE_PATH` từ `.env`
-- [ ] `main.py`: tạo app FastAPI, bật CORS, gắn router `/api`
-- [ ] Endpoint `GET /health` trả về `{"status": "ok"}`
+- [x] `config.py`: đọc `PORT`, `PLACE_NAME`, `CORS_ORIGINS`, `GRAPH_CACHE_PATH` từ `.env`
+- [x] `main.py`: tạo app FastAPI, bật CORS, gắn router `/api`
+- [x] Endpoint `GET /health` trả về `{"status": "ok"}`
 
 ### 2.2 Tải và quản lý bản đồ — P1
 - [ ] `graph_loader.py`: tải mạng đường của quận bằng `osmnx.graph_from_place(..., network_type="drive")`
@@ -67,12 +67,12 @@ Mức ưu tiên:
 **Kết quả cần đạt:** Dijkstra và A\* cho cùng độ dài đường đi; A\* duyệt ít node hơn.
 
 ### 2.4 API tìm đường — P1
-- [ ] `schemas.py`: Pydantic models cho request và response
-- [ ] `GET /api/route?algo=dijkstra|astar&from_lat=&from_lng=&to_lat=&to_lng=`
+- [x] `schemas.py`: Pydantic models cho request và response
+- [x] `GET /api/route?algo=dijkstra|astar&from_lat=&from_lng=&to_lat=&to_lng=`
   - Trả về đường đi dạng danh sách tọa độ `[[lat, lng], ...]`
   - Trả về tọa độ các node đã duyệt
   - Trả về độ dài, thời gian chạy, số node đã duyệt
-- [ ] Trả lỗi 400 khi tọa độ nằm ngoài quận, 404 khi không có đường
+- [x] Trả lỗi 400 khi tọa độ nằm ngoài quận, 404 khi không có đường
 
 ### 2.5 API so sánh — P2
 - [ ] `GET /api/compare?...`: chạy tất cả thuật toán trên cùng cặp điểm
@@ -96,7 +96,7 @@ Mức ưu tiên:
 
 ### 3.1 Khởi tạo — P1
 - [ ] `main.jsx`: render `App`, import `leaflet/dist/leaflet.css`
-- [ ] `api/client.js`: các hàm `getGraphInfo()`, `findRoute()`, `compareRoutes()`, đọc `VITE_API_URL`
+- [x] `api/client.js`: các hàm `getGraphInfo()`, `findRoute()`, `compareRoutes()`, đọc `VITE_API_URL`
 - [ ] `App.jsx`: bố cục 2 cột (bản đồ, bảng điều khiển); trên điện thoại xếp dọc
 
 ### 3.2 Bản đồ — P1 (`MapView.jsx`)
