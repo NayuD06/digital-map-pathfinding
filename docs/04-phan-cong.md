@@ -5,6 +5,7 @@ Nhóm 5 người. Mỗi người phụ trách **một phần code** và **một 
 Mã công việc (ví dụ `2.3`) tham chiếu tới [03-chuc-nang-can-lam.md](03-chuc-nang-can-lam.md).
 
 Hướng dẫn từng bước, gợi ý code và cách tự kiểm tra cho mỗi thành viên: [06-huong-dan-thanh-vien.md](06-huong-dan-thanh-vien.md).
+Nội dung báo cáo, slide và câu hỏi bảo vệ của từng người: [07-noi-dung-tung-nguoi.md](07-noi-dung-tung-nguoi.md).
 
 > Điền tên thật vào cột **Họ tên**.
 
