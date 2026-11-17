@@ -11,6 +11,7 @@ venv/
 
 # Dữ liệu bản đồ cache (tải lại được)
 BE/data/*.graphml
+BE/data/osmnx_cache/
 
 # Node
 node_modules/
