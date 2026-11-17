@@ -1,6 +1,6 @@
 # Hướng dẫn thực hiện cho từng thành viên
 
-Tài liệu này hướng dẫn **TV2, TV3, TV4, TV5** làm phần việc của mình trong [04-phan-cong.md](04-phan-cong.md): sửa file nào, làm theo thứ tự nào, gợi ý cách code, cách tự kiểm tra và phần báo cáo cần viết. Mã công việc (ví dụ `2.3`) tham chiếu tới [03-chuc-nang-can-lam.md](03-chuc-nang-can-lam.md). Định dạng dữ liệu giữa FE và BE xem ở [05-dinh-dang-api.md](05-dinh-dang-api.md).
+Tài liệu này hướng dẫn **TV2, TV3, TV4, TV5** làm phần việc của mình trong [04-phan-cong.md](04-phan-cong.md): sửa file nào, làm theo thứ tự nào, gợi ý cách code, cách tự kiểm tra và phần báo cáo cần viết. Mã công việc (ví dụ `2.3`) tham chiếu tới [03-chuc-nang-can-lam.md](03-chuc-nang-can-lam.md). Định dạng dữ liệu giữa FE và BE xem ở [05-dinh-dang-api.md](05-dinh-dang-api.md). Dàn ý chi tiết phần báo cáo và thuyết trình của từng người xem ở [07-noi-dung-tung-nguoi.md](07-noi-dung-tung-nguoi.md).
 
 > Các đoạn code mẫu bên dưới đã được chạy thử trên bản đồ Quận 1 thật: Dijkstra và A\* cho cùng độ dài đường đi, khớp với `networkx.shortest_path_length`, FE vẽ được đường đi và biểu đồ khi nối với BE. Đây là **gợi ý**, mỗi người cần đọc hiểu và tự viết lại theo cách của mình để trả lời được khi bảo vệ.
 
