@@ -19,3 +19,4 @@ FE và BE chạy riêng, mỗi bên một port. Xem hướng dẫn chạy trong 
 - [Phân công nhóm](docs/04-phan-cong.md)
 - [Định dạng API](docs/05-dinh-dang-api.md)
 - [Hướng dẫn thực hiện cho từng thành viên](docs/06-huong-dan-thanh-vien.md)
+- [Nội dung báo cáo và thuyết trình của từng người](docs/07-noi-dung-tung-nguoi.md)
