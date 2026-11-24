@@ -13,10 +13,10 @@ Mức ưu tiên:
 
 | # | Nội dung | Ưu tiên | Trạng thái |
 |---|---|---|---|
-| 1.1 | Khái niệm bản đồ số, vai trò trong ITS | P1 | [ ] |
-| 1.2 | Mô hình dữ liệu bản đồ: node, edge, thuộc tính đường | P1 | [ ] |
-| 1.3 | So sánh nguồn dữ liệu: OpenStreetMap, Google Maps, HERE, Mapbox, VietMap | P1 | [ ] |
-| 1.4 | Hệ tọa độ WGS84, Web Mercator; tile map và vector tile | P2 | [ ] |
+| 1.1 | Khái niệm bản đồ số, vai trò trong ITS | P1 | [x] |
+| 1.2 | Mô hình dữ liệu bản đồ: node, edge, thuộc tính đường | P1 | [x] |
+| 1.3 | So sánh nguồn dữ liệu: OpenStreetMap, Google Maps, HERE, Mapbox, VietMap | P1 | [x] |
+| 1.4 | Hệ tọa độ WGS84, Web Mercator; tile map và vector tile | P2 | [x] |
 | 1.5 | Mô hình hóa mạng giao thông thành đồ thị có hướng, có trọng số | P1 | [ ] |
 | 1.6 | Thuật toán BFS/DFS (làm mốc so sánh) | P2 | [ ] |
 | 1.7 | Thuật toán Dijkstra: ý tưởng, mã giả, độ phức tạp | P1 | [ ] |
@@ -38,10 +38,10 @@ Mức ưu tiên:
 - [x] Endpoint `GET /health` trả về `{"status": "ok"}`
 
 ### 2.2 Tải và quản lý bản đồ — P1
-- [ ] `graph_loader.py`: tải mạng đường của quận bằng `osmnx.graph_from_place(..., network_type="drive")`
-- [ ] Lưu cache ra file `.graphml`; lần chạy sau đọc từ file
-- [ ] Nạp đồ thị một lần khi khởi động server
-- [ ] `GET /api/graph/info`: trả về tên quận, số node, số cạnh, khung bao (bbox), tâm bản đồ
+- [x] `graph_loader.py`: tải mạng đường của quận bằng `osmnx.graph_from_place(..., network_type="drive")`
+- [x] Lưu cache ra file `.graphml`; lần chạy sau đọc từ file
+- [x] Nạp đồ thị một lần khi khởi động server
+- [x] `GET /api/graph/info`: trả về tên quận, số node, số cạnh, khung bao (bbox), tâm bản đồ
 
 **Kết quả cần đạt:** khởi động lần 2 không tải lại từ mạng, API trả đúng số node/cạnh.
 
@@ -49,7 +49,7 @@ Mức ưu tiên:
 - [ ] `utils.py`:
   - [ ] `haversine(lat1, lng1, lat2, lng2)` tính khoảng cách mét
   - [ ] `reconstruct_path(parent, start, goal)` dựng lại đường đi
-  - [ ] `nearest_node(G, lat, lng)` tìm node gần tọa độ nhất
+  - [x] `nearest_node(G, lat, lng)` tìm node gần tọa độ nhất
 - [ ] `dijkstra.py`: tự cài đặt bằng `heapq`, trọng số là `length` của cạnh
 - [ ] `astar.py`: tự cài đặt, heuristic Haversine tới đích
 - [ ] Cả 2 hàm trả về cùng một cấu trúc:
