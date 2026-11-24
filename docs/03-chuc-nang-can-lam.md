@@ -95,17 +95,17 @@ Mức ưu tiên:
 ## 3. Chức năng Frontend (`FE/`)
 
 ### 3.1 Khởi tạo — P1
-- [ ] `main.jsx`: render `App`, import `leaflet/dist/leaflet.css`
+- [x] `main.jsx`: render `App`, import `leaflet/dist/leaflet.css`
 - [x] `api/client.js`: các hàm `getGraphInfo()`, `findRoute()`, `compareRoutes()`, đọc `VITE_API_URL`
-- [ ] `App.jsx`: bố cục 2 cột (bản đồ, bảng điều khiển); trên điện thoại xếp dọc
+- [x] `App.jsx`: bố cục 2 cột (bản đồ, bảng điều khiển); trên điện thoại xếp dọc
 
 ### 3.2 Bản đồ — P1 (`MapView.jsx`)
-- [ ] Hiển thị bản đồ OSM, căn giữa theo tâm quận lấy từ `/api/graph/info`
-- [ ] Click lần 1 đặt điểm đi (marker xanh lá), lần 2 đặt điểm đến (marker đỏ)
-- [ ] Kéo thả marker để đổi điểm
-- [ ] Vẽ đường đi bằng `Polyline`
-- [ ] Vẽ các node đã duyệt bằng `CircleMarker` nhỏ, mờ
-- [ ] Vẽ khung bao của quận để người dùng biết vùng hỗ trợ
+- [x] Hiển thị bản đồ OSM, căn giữa theo tâm quận lấy từ `/api/graph/info`
+- [x] Click lần 1 đặt điểm đi (marker xanh lá), lần 2 đặt điểm đến (marker đỏ)
+- [x] Kéo thả marker để đổi điểm
+- [x] Vẽ đường đi bằng `Polyline`
+- [x] Vẽ các node đã duyệt bằng `CircleMarker` nhỏ, mờ
+- [x] Vẽ khung bao của quận để người dùng biết vùng hỗ trợ
 
 ### 3.3 Bảng điều khiển — P1 (`ControlPanel.jsx`)
 - [ ] Chọn thuật toán: Dijkstra / A\*
@@ -126,7 +126,7 @@ Mức ưu tiên:
 ### 3.6 Mở rộng — P3
 - [ ] Hiệu ứng duyệt node theo thời gian (animation) để thấy cách thuật toán lan ra
 - [ ] Chọn đoạn đường để đánh dấu kẹt xe
-- [ ] Ô tìm kiếm địa chỉ (geocoding qua Nominatim)
+- [x] Ô tìm kiếm địa chỉ (geocoding qua Nominatim)
 
 ---
 
