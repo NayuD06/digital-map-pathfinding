@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import L from 'leaflet'
-import { CircleMarker, MapContainer, Marker, Polyline, TileLayer, useMap, useMapEvents } from 'react-leaflet'
+import { CircleMarker, MapContainer, Marker, Polyline, Rectangle, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import { ALGORITHMS } from '../constants.js'
 
 const makePin = (type) => L.divIcon({
@@ -45,11 +45,16 @@ function DraggableMarker({ point, icon, onMove }) {
   } }} />
 }
 export default function MapView({ graphInfo, start, end, results, showVisited, onMapClick, onStartMove, onEndMove, resetCount = 0, placeTarget = null }) {
-  const [south, west, north, east] = graphInfo.bbox
-  const bounds = [[south, west], [north, east]]
+  // useMemo giữ nguyên mảng giữa các lần render, để Recenter chỉ chạy khi bấm nút "Về khu vực bản đồ".
+  const bounds = useMemo(() => {
+    const [south, west, north, east] = graphInfo.bbox
+    return [[south, west], [north, east]]
+  }, [graphInfo.bbox])
   const ordered = [...results].sort((a, b) => (b.visited_count || 0) - (a.visited_count || 0))
   return <MapContainer className="map" bounds={bounds} preferCanvas zoomControl={false} scrollWheelZoom>
     <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    {/* Khung bao vùng có dữ liệu bản đồ, để người dùng biết chọn điểm trong vùng nào */}
+    <Rectangle bounds={bounds} interactive={false} pathOptions={{ color: '#555', weight: 1, dashArray: '6 6', fill: false }} />
     <ResizeMap />
     <FlyToAddress target={placeTarget} />
     <MapClick onMapClick={onMapClick} />
@@ -58,7 +63,7 @@ export default function MapView({ graphInfo, start, end, results, showVisited, o
       <CircleMarker key={`${r.algorithm}-visited-${index}`} center={position} radius={2} interactive={false}
         pathOptions={{ color: ALGORITHMS[r.algorithm]?.color || '#2682d8', stroke: false, fillOpacity: 0.22 }} />))}
     {ordered.map((r, index) => <Polyline key={`${r.algorithm}-${index}`} positions={r.path || []} interactive={false}
-      pathOptions={{ color: ALGORITHMS[r.algorithm]?.color || '#2682d8', weight: ordered.length > 1 && index === 0 ? 9 : 5, opacity: 0.95, dashArray: r.route_source === 'straight-fallback' ? '8 10' : undefined }} />)}
+      pathOptions={{ color: ALGORITHMS[r.algorithm]?.color || '#2682d8', weight: ordered.length > 1 && index === 0 ? 9 : 5, opacity: 0.95 }} />)}
     {start && <DraggableMarker point={start} icon={startIcon} onMove={onStartMove} />}
     {end && <DraggableMarker point={end} icon={endIcon} onMove={onEndMove} />}
   </MapContainer>

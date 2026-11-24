@@ -36,7 +36,6 @@ export default function App() {
   const [resetCount, setResetCount] = useState(0)
   // Mỗi yêu cầu có một phiên bản để phản hồi cũ không ghi đè kết quả mới.
   const requestId = useRef(0)
-  const mockMode = import.meta.env.VITE_USE_MOCK === 'true'
 
   useEffect(() => { ensureSampleAccounts().catch(console.error) }, [])
   useEffect(() => {
@@ -163,7 +162,6 @@ export default function App() {
       <div className="map-top-actions"><button type="button" onClick={() => setResetCount(n => n + 1)}>⌖ Về khu vực bản đồ</button></div>
       <div className="map-bottom-note">© OpenStreetMap contributors</div>
 
-      {mockMode && results.some(r => r.route_source === 'straight-fallback') && <div className="mock-route-note">Không lấy được tuyến đường phố · Nét đứt chỉ nối hai vị trí</div>}
       {results.length === 2 && <div className="comparison-legend">{results.map(r => <span key={r.algorithm}><i style={{ background: ALGORITHMS[r.algorithm]?.color }} /> {ALGORITHMS[r.algorithm]?.label || r.algorithm}</span>)} <small>Cùng cặp điểm A/B</small></div>}
     </main>
     <aside className="sidebar">
@@ -191,10 +189,9 @@ export default function App() {
         <div className="action-secondary"><button onClick={() => run(true)} disabled={!canRun || loading}>◇ So sánh cách tìm đường</button><button onClick={clearRoute} disabled={loading || (!start && !end)}>Xóa tuyến</button></div></div>
       {error && <div className="error" role="alert">{error}</div>}
       {summary && <section className="results-section"><div className="result-title">✓ Đã tìm thấy tuyến đường</div>
-        {single && <div className="results-card"><div><span>Thuật toán vừa chạy</span><strong>{ALGORITHMS[single.algorithm]?.label || single.algorithm}</strong></div><div><span>Độ dài tuyến</span><strong className="distance-emphasis">{formatDistance(single.distance_m)}</strong></div>{!mockMode && <><div><span>Thời gian chạy</span><strong>{Number(single.runtime_ms).toFixed(2)} ms</strong></div><div><span>Số nút đã duyệt</span><strong>{Number(single.visited_count).toLocaleString('vi-VN')}</strong></div></>}</div>}
-        {results.length === 2 && <div className="compare-cards">{results.map(r => <div className="compare-card" key={r.algorithm}><h3 style={{ borderColor: ALGORITHMS[r.algorithm]?.color }}>{ALGORITHMS[r.algorithm]?.label || r.algorithm}</h3><p>Độ dài: <strong>{formatDistance(r.distance_m)}</strong></p>{!mockMode && <><p>Thời gian: <strong>{Number(r.runtime_ms).toFixed(2)} ms</strong></p><p>Nút đã duyệt: <strong>{Number(r.visited_count).toLocaleString('vi-VN')}</strong></p></>}</div>)}</div>}
-        {!mockMode && <label className="visited-control"><input type="checkbox" checked={showVisited} onChange={e => setShowVisited(e.target.checked)} /> Xem số nút đã duyệt trên bản đồ</label>}
-      {mockMode && <p className="route-disclosure">Tuyến tham khảo từ OSRM công khai; kết quả chưa phải thuật toán của nhóm.</p>}
+        {single && <div className="results-card"><div><span>Thuật toán vừa chạy</span><strong>{ALGORITHMS[single.algorithm]?.label || single.algorithm}</strong></div><div><span>Độ dài tuyến</span><strong className="distance-emphasis">{formatDistance(single.distance_m)}</strong></div><div><span>Thời gian chạy</span><strong>{Number(single.runtime_ms).toFixed(2)} ms</strong></div><div><span>Số nút đã duyệt</span><strong>{Number(single.visited_count).toLocaleString('vi-VN')}</strong></div></div>}
+        {results.length === 2 && <div className="compare-cards">{results.map(r => <div className="compare-card" key={r.algorithm}><h3 style={{ borderColor: ALGORITHMS[r.algorithm]?.color }}>{ALGORITHMS[r.algorithm]?.label || r.algorithm}</h3><p>Độ dài: <strong>{formatDistance(r.distance_m)}</strong></p><p>Thời gian: <strong>{Number(r.runtime_ms).toFixed(2)} ms</strong></p><p>Nút đã duyệt: <strong>{Number(r.visited_count).toLocaleString('vi-VN')}</strong></p></div>)}</div>}
+        <label className="visited-control"><input type="checkbox" checked={showVisited} onChange={e => setShowVisited(e.target.checked)} /> Xem số nút đã duyệt trên bản đồ</label>
       </section>}
       {!summary && <div className="tip">✧ {canRun ? 'Đã chọn hai điểm. Nhấn Tìm đường để xem kết quả.' : 'Chọn điểm đi và điểm đến trên bản đồ.'}</div>}
       <footer className="sidebar-footer">Khảo sát bản đồ số & thuật toán tìm đường · ITS</footer>
