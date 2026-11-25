@@ -45,6 +45,30 @@ class CompareResult(BaseModel):
     results: list[RouteResult]
 
 
+class BenchmarkRow(BaseModel):
+    pair: int = Field(description="Chỉ số cặp điểm, bắt đầu từ 0")
+    straight_m: float = Field(description="Khoảng cách đường chim bay (mét)")
+    algorithm: Algorithm
+    distance_m: float
+    runtime_ms: float
+    visited_count: int
+
+
+class BenchmarkSummary(BaseModel):
+    algorithm: Algorithm
+    avg_distance_m: float
+    avg_runtime_ms: float
+    avg_visited_count: float
+
+
+class BenchmarkResult(BaseModel):
+    """GET /api/benchmark: số liệu từng cặp điểm và trung bình theo thuật toán."""
+
+    pair_count: int
+    summary: list[BenchmarkSummary]
+    rows: list[BenchmarkRow]
+
+
 class ErrorResponse(BaseModel):
     """Lỗi 400 (tọa độ ngoài bản đồ), 404 (không có đường), 503 (chưa nạp bản đồ)."""
 

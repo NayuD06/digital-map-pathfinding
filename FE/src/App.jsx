@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { compareRoutes, findRoute, getGraphInfo } from './api/client.js'
 import MapView from './components/MapView.jsx'
+import ControlPanel from './components/ControlPanel.jsx'
+import StatsPanel from './components/StatsPanel.jsx'
+import BenchmarkPanel from './components/BenchmarkPanel.jsx'
 import AccountDialog from './components/AccountDialog.jsx'
 import AddressSearch from './components/AddressSearch.jsx'
 import ProfileDialog from './components/ProfileDialog.jsx'
 import { resolvePlace, fromSearch } from './api/placeLookup.js'
 import { currentUser, logout, listFavorites, addFavorite, deleteFavorite, ensureSampleAccounts, updateFavoriteDetails } from './api/demoAuth.js'
 import brandLogo from './assets/logo-ban-do-so-icon.png'
-import { ALGORITHMS, formatDistance } from './constants.js'
+import { ALGORITHMS } from './constants.js'
 
-// TV4 giữ các state và bố cục; UI điều khiển dưới đây là bản tạm chạy demo.
-// Khi TV5 hoàn thành ControlPanel/StatsPanel/CompareChart, thay phần UI tạm bằng component của TV5.
+const CompareChart = lazy(() => import('./components/CompareChart.jsx'))
+
 export default function App() {
   const [user, setUser] = useState(() => currentUser())
   const [authOpen, setAuthOpen] = useState(false)
@@ -26,6 +29,7 @@ export default function App() {
   const endLookup = useRef(0)
   const [notice, setNotice] = useState('')
   const [graphInfo, setGraphInfo] = useState(null)
+  const [graphError, setGraphError] = useState('')
   const [start, setStart] = useState(null)
   const [end, setEnd] = useState(null)
   const [algo, setAlgo] = useState('astar')
@@ -36,6 +40,7 @@ export default function App() {
   const [resetCount, setResetCount] = useState(0)
   // Mỗi yêu cầu có một phiên bản để phản hồi cũ không ghi đè kết quả mới.
   const requestId = useRef(0)
+  const mockMode = import.meta.env.VITE_USE_MOCK === 'true'
 
   useEffect(() => { ensureSampleAccounts().catch(console.error) }, [])
   useEffect(() => {
@@ -56,7 +61,7 @@ export default function App() {
   }, [favoritesOpen, user])
   useEffect(() => {
     let active = true
-    getGraphInfo().then(value => { if (active) setGraphInfo(value) }).catch(e => { if (active) setError(e.message) })
+    getGraphInfo().then(value => { if (active) setGraphInfo(value) }).catch(e => { if (active) setGraphError(e.message) })
     return () => { active = false }
   }, [])
   function cancelPendingRoute() {
@@ -147,13 +152,12 @@ export default function App() {
     logout(); setUser(null); setFavorites([]); setFavoritesOpen(false); setProfileOpen(false); setNotice('Đã đăng xuất.')
   }
   const canRun = Boolean(start && end && graphInfo)
-  const single = results.length === 1 ? results[0] : null
   const summary = results.length > 0
   return <div className="app">
     <main className="map-area" aria-label="Bản đồ tương tác">
       {graphInfo ? <MapView graphInfo={graphInfo} start={start} end={end} results={results} showVisited={showVisited}
         onMapClick={selectMapPoint} onStartMove={moveStart} onEndMove={moveEnd} resetCount={resetCount} placeTarget={placeTarget} />
-        : <div className="map-fallback">{error || 'Đang tải dữ liệu bản đồ…'}</div>}
+        : <div className="map-fallback">{graphError || 'Đang tải dữ liệu bản đồ…'}</div>}
       <div className="map-account-actions">
         <button type="button" onClick={() => { if (!user) { setNotice('Bạn cần đăng nhập để sử dụng địa điểm yêu thích.'); openLogin() } else setFavoritesOpen(true) }}>☆ Yêu thích</button>
         {user ? <><button type="button" className="profile-trigger" title="Chỉnh sửa tài khoản" onClick={() => setProfileOpen(true)}>{user.avatar ? <img src={user.avatar} alt="Avatar" /> : <span className="avatar-initial">{user.name.slice(0,1).toUpperCase()}</span>}<span>{user.name}</span></button><button type="button" onClick={doLogout}>Đăng xuất</button></> : <><button type="button" onClick={openLogin}>Đăng nhập</button><button type="button" className="join-action" onClick={() => { setAuthMode('register'); setAuthOpen(true) }}>Đăng ký</button></>}
@@ -183,17 +187,32 @@ export default function App() {
         <div className="point-field" id="to-view"><b className="point-tag end-tag">B</b><button type="button" className="place-summary" disabled={!end} onClick={() => setPlaceDetails(endInfo)}><strong>{end ? (endInfo?.name || 'Đang xác định địa điểm…') : 'Chọn trên bản đồ'}</strong>{end && <small>{endInfo?.address || 'Đang lấy địa chỉ…'}</small>}</button><button type="button" className="favorite-star" title="Lưu điểm đến" aria-label="Lưu điểm đến vào yêu thích" onClick={() => saveFavorite(end, 'Điểm đến')}>☆</button></div>
         <p className="selection-hint">{!start ? 'Bấm lên bản đồ để chọn điểm đi' : !end ? 'Đã chọn điểm đi · Bấm để chọn điểm đến' : 'Đã chọn 2 điểm · Có thể kéo ghim để điều chỉnh'}</p>
       </section>
-      <section className="algorithm-section"><h2>Thuật toán</h2><div className="algorithm-tabs">{Object.entries(ALGORITHMS).map(([key, data]) =>
-        <button type="button" key={key} className={key === algo ? 'active' : ''} onClick={() => { setAlgo(key); cancelPendingRoute() }} aria-pressed={key === algo}>{data.label}</button>)}</div></section>
-      <div className="action-area"><button className="primary-action" onClick={() => run(false)} disabled={!canRun || loading}>{loading ? 'Đang tìm đường…' : '⌁  Tìm đường'}</button>
-        <div className="action-secondary"><button onClick={() => run(true)} disabled={!canRun || loading}>◇ So sánh cách tìm đường</button><button onClick={clearRoute} disabled={loading || (!start && !end)}>Xóa tuyến</button></div></div>
-      {error && <div className="error" role="alert">{error}</div>}
-      {summary && <section className="results-section"><div className="result-title">✓ Đã tìm thấy tuyến đường</div>
-        {single && <div className="results-card"><div><span>Thuật toán vừa chạy</span><strong>{ALGORITHMS[single.algorithm]?.label || single.algorithm}</strong></div><div><span>Độ dài tuyến</span><strong className="distance-emphasis">{formatDistance(single.distance_m)}</strong></div><div><span>Thời gian chạy</span><strong>{Number(single.runtime_ms).toFixed(2)} ms</strong></div><div><span>Số nút đã duyệt</span><strong>{Number(single.visited_count).toLocaleString('vi-VN')}</strong></div></div>}
-        {results.length === 2 && <div className="compare-cards">{results.map(r => <div className="compare-card" key={r.algorithm}><h3 style={{ borderColor: ALGORITHMS[r.algorithm]?.color }}>{ALGORITHMS[r.algorithm]?.label || r.algorithm}</h3><p>Độ dài: <strong>{formatDistance(r.distance_m)}</strong></p><p>Thời gian: <strong>{Number(r.runtime_ms).toFixed(2)} ms</strong></p><p>Nút đã duyệt: <strong>{Number(r.visited_count).toLocaleString('vi-VN')}</strong></p></div>)}</div>}
-        <label className="visited-control"><input type="checkbox" checked={showVisited} onChange={e => setShowVisited(e.target.checked)} /> Xem số nút đã duyệt trên bản đồ</label>
-      </section>}
-      {!summary && <div className="tip">✧ {canRun ? 'Đã chọn hai điểm. Nhấn Tìm đường để xem kết quả.' : 'Chọn điểm đi và điểm đến trên bản đồ.'}</div>}
+      <ControlPanel
+        algo={algo}
+        onAlgoChange={(nextAlgo) => {
+          setAlgo(nextAlgo)
+          cancelPendingRoute()
+        }}
+        canRun={canRun}
+        canClear={Boolean(start || end)}
+        loading={loading}
+        comparing={loading && currentCompare.current}
+        error={graphError || error}
+        showVisited={showVisited}
+        canShowVisited={results.some((result) => result.visited?.length > 0)}
+        onShowVisitedChange={setShowVisited}
+        onFind={() => run(false)}
+        onCompare={() => run(true)}
+        onClear={clearRoute}
+      />
+      <StatsPanel results={results} mockMode={mockMode} />
+      {!mockMode && results.length === 2 && (
+        <Suspense fallback={null}>
+          <CompareChart results={results} />
+        </Suspense>
+      )}
+      {!summary && !loading && !error && !graphError && canRun && <div className="tip">✧ Đã chọn hai điểm. Nhấn Tìm đường để xem kết quả.</div>}
+      <BenchmarkPanel />
       <footer className="sidebar-footer">Khảo sát bản đồ số & thuật toán tìm đường · ITS</footer>
     </aside>
     {authOpen && <AccountDialog initialMode={authMode} onClose={() => setAuthOpen(false)} onSuccess={account => { setUser(account); setFavorites(listFavorites(account.email)); setAuthOpen(false); setNotice(`Xin chào ${account.name}!`) }} />}
