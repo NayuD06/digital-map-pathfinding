@@ -213,3 +213,92 @@
   font-size: 13px;
   line-height: 1.5;
 }
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 9px 4px;
+  border-bottom: 1px solid #edf0f3;
+  text-align: right;
+}
+
+.stats-table th:first-child {
+  text-align: left;
+}
+
+.comparison-chart,
+.benchmark-panel {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #edf0f3;
+}
+
+.comparison-chart h2,
+.benchmark-panel summary {
+  margin: 0;
+  color: #273849;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.comparison-chart-metric {
+  margin-top: 12px;
+  padding: 10px 8px 2px;
+  border: 1px solid #e5eaf0;
+  border-radius: 8px;
+}
+
+.comparison-chart-metric h3 {
+  margin: 0 0 4px;
+  color: #50667b;
+  font-size: 12px;
+}
+
+.benchmark-panel summary {
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.benchmark-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.benchmark-form label,
+.benchmark-status {
+  color: #50667b;
+  font-size: 12px;
+}
+
+.benchmark-form input {
+  width: 76px;
+  border: 1px solid #dce6ef;
+  border-radius: 8px;
+  padding: 8px;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+.benchmark-form button {
+  grid-column: 1 / -1;
+}
+
+.benchmark-download {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid #dce6ef;
+  border-radius: 8px;
+  background: #fff;
+  color: #3172b4;
+  font-size: 12px;
+  font-weight: 650;
+}

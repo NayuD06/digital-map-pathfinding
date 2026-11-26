@@ -68,7 +68,26 @@ Cùng tham số với `/api/route` nhưng không có `algo`. Trả về kết qu
 { "results": [ { "algorithm": "dijkstra", "...": "..." }, { "algorithm": "astar", "...": "..." } ] }
 ```
 
-TV5 thêm endpoint này vào `routes.py` bằng cách gọi lại hàm `find_route` cho mỗi thuật toán.
+Endpoint gọi lại `find_route` cho từng thuật toán và dùng các mã lỗi giống `/api/route`.
+
+## `GET /api/benchmark` (TV5)
+
+| Tham số | Kiểu | Mặc định | Ghi chú |
+|---|---|---|---|
+| `n` | số nguyên | 50 | Số cặp điểm cần đo, từ 1 đến 500 |
+| `seed` | số nguyên | 42 | Chọn lại cùng các cặp điểm khi dùng cùng đồ thị và tham số |
+
+Ví dụ: `/api/benchmark?n=100&seed=42`
+
+| Trường trả về | Nội dung |
+|---|---|
+| `pair_count` | Số cặp đo được, có thể ít hơn `n` |
+| `summary` | Mỗi thuật toán một bản ghi gồm `algorithm`, `avg_distance_m`, `avg_runtime_ms`, `avg_visited_count` |
+| `rows` | Mỗi cặp điểm và thuật toán một bản ghi gồm `pair` (chỉ số từ 0), `straight_m` (khoảng cách đường chim bay), `algorithm`, `distance_m`, `runtime_ms`, `visited_count` |
+
+Mỗi lần thử chọn hai node khác nhau và chạy cả hai thuật toán. Cặp có thể lặp giữa các lần thử. Endpoint bỏ qua cặp không có đường đi và dừng sau tối đa `10 × n` lần thử. Khi chưa đo được cặp nào, endpoint trả `pair_count: 0` cùng hai mảng rỗng. Thời gian đo có thể thay đổi giữa các lần chạy.
+
+API trả `422` khi tham số không hợp lệ và `503` khi chưa nạp đồ thị hoặc chức năng tìm đường chưa sẵn sàng. Giao diện benchmark lấy số liệu trực tiếp từ backend.
 
 ## Giao diện giữa các phần trong BE
 
