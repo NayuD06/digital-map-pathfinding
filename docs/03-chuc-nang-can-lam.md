@@ -46,13 +46,13 @@ Mức ưu tiên:
 **Kết quả cần đạt:** khởi động lần 2 không tải lại từ mạng, API trả đúng số node/cạnh.
 
 ### 2.3 Thuật toán — P1
-- [ ] `utils.py`:
-  - [ ] `haversine(lat1, lng1, lat2, lng2)` tính khoảng cách mét
-  - [ ] `reconstruct_path(parent, start, goal)` dựng lại đường đi
+- [x ] `utils.py`:
+  - [x ] `haversine(lat1, lng1, lat2, lng2)` tính khoảng cách mét
+  - [x] `reconstruct_path(parent, start, goal)` dựng lại đường đi
   - [x] `nearest_node(G, lat, lng)` tìm node gần tọa độ nhất
-- [ ] `dijkstra.py`: tự cài đặt bằng `heapq`, trọng số là `length` của cạnh
-- [ ] `astar.py`: tự cài đặt, heuristic Haversine tới đích
-- [ ] Cả 2 hàm trả về cùng một cấu trúc:
+- [x ] `dijkstra.py`: tự cài đặt bằng `heapq`, trọng số là `length` của cạnh
+- [x ] `astar.py`: tự cài đặt, heuristic Haversine tới đích
+- [ x] Cả 2 hàm trả về cùng một cấu trúc:
   ```python
   {
       "path": [node_id, ...],
@@ -79,10 +79,10 @@ Mức ưu tiên:
 - [ ] `GET /api/benchmark?n=50`: chạy N cặp điểm ngẫu nhiên, trả về thống kê trung bình
 
 ### 2.6 Kiểm thử — P1
-- [ ] Test Dijkstra và A\* trên đồ thị nhỏ tự tạo (biết trước kết quả)
-- [ ] Test Dijkstra và A\* cho cùng độ dài trên bản đồ thật
-- [ ] Đối chiếu với `networkx.shortest_path_length` để kiểm tra độ đúng
-- [ ] Test trường hợp không có đường đi
+- [x ] Test Dijkstra và A\* trên đồ thị nhỏ tự tạo (biết trước kết quả)
+- [x ] Test Dijkstra và A\* cho cùng độ dài trên bản đồ thật
+- [ x] Đối chiếu với `networkx.shortest_path_length` để kiểm tra độ đúng
+- [ x] Test trường hợp không có đường đi
 
 ### 2.7 Mở rộng — P3
 - [ ] Bidirectional Dijkstra (`algorithms/bidirectional.py`)
